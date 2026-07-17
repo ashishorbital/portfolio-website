@@ -426,17 +426,23 @@ a:hover {
   box-shadow: 1px 1px 0px var(--color-ink);
 }
 
-.btn-primary {
+.btn-primary,
+a.btn-primary:hover,
+a.btn-primary:active {
   background-color: var(--color-accent-blue);
   color: var(--color-white);
 }
 
-.btn-secondary {
+.btn-secondary,
+a.btn-secondary:hover,
+a.btn-secondary:active {
   background-color: var(--color-accent-green);
   color: var(--color-white);
 }
 
-.btn-accent {
+.btn-accent,
+a.btn-accent:hover,
+a.btn-accent:active {
   background-color: var(--color-accent-red);
   color: var(--color-white);
 }
