@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashish P S | Portfolio</title>
+  <meta name="description"
+    content="Portfolio of Ashish P S.">
+  <meta name="keywords"
+    content="Ashish P S, Machine Learning, Data Analyst, CUSAT, B.Tech CSE, Portfolio, Retro Portfolio">
+  <link rel="stylesheet" href="index.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+
+<body>
+
+  <!-- CRT Screen Scanline Overlay -->
+  <div class="crt-overlay"></div>
+
+  <!-- Fullscreen Interactive Background Canvas -->
+  <canvas id="background-game"></canvas>
+
+  <!-- Navigation Bar -->
+  <div class="nav-wrapper">
+    <nav class="nav-container" id="navbar">
+      <div class="nav-logo">
+        <div class="logo-dot"></div>
+        <span>ASHISH_PS.EXE</span>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">MENU</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#terminal">Terminal</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main Body Content -->
+  <main class="main-content">
+
+    <!-- HERO SECTION -->
+    <section id="home" class="section hero-grid">
+      <div class="hero-text">
+        <h2>System Boot Sequence Complete</h2>
+        <h1>HI, I'M <span>ASHISH.</span></h1>
+        <div class="hero-subtitle">PRODUCT BUILDER</div>
+        <p class="hero-bio">
+          Passionate about building intelligent web experiences and AI-driven applications. I enjoy combining Machine Learning,
+          modern web technologies, and software engineering to create impactful digital products.
+        </p>
+        <div class="hero-buttons">
+          <a href="assets/Ashish_PS_resume.docx" download class="btn btn-primary">Download Resume</a>
+          <a href="#contact" class="btn btn-accent">Hire Me</a>
+        </div>
+        <div class="hero-buttons">
+          <a href="https://github.com/ashishorbital" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small">GitHub</a>
+          <a href="https://linkedin.com/in/ashishpsadan" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-small">LinkedIn</a>
+          <a href="#contact" class="btn btn-secondary btn-small">Email</a>
+        </div>
+      </div>
+
+      <!-- Retro CRT Cabinet for Avatar -->
+      <div class="avatar-monitor">
+        <div class="monitor-screen" id="monitor-screen">
+          <div class="monitor-view" id="monitor-avatar-view">
+            <img src="assets/avatar.png" alt="Ashish Pixel Avatar">
+          </div>
+          <div class="monitor-screen-glare"></div>
+        </div>
+        <div class="monitor-led"></div>
+        <div class="monitor-info">
+          <span>SYS_STATUS: ACTIVE</span>
+          <span>LOC: KOCHI, IND</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section">
+      <h2 class="section-title">01. About Me</h2>
+      <div class="about-card">
+        <p class="body-large-bold">
+          "Designing modern web applications. Engineering intelligent AI solutions. Building technology that matters."
+        </p>
+        <br>
+        <p>
+          I'm a Computer Science undergraduate who enjoys creating products that combine Artificial Intelligence, Machine
+          Learning, and Full-Stack Development. From modern web applications to autonomous AI systems, I love transforming ideas
+          into practical, scalable software.
+          
+          My work spans Generative AI, Machine Learning, Web Development, Cloud Computing, Data Engineering, and Intelligent
+          Automation. I enjoy solving challenging problems, learning emerging technologies, and building projects that create
+          real-world value.
+        </p>
+        <p>
+          Currently, I'm focused on developing AI-powered web applications, autonomous software systems, and scalable cloud-native
+          solutions while continuously expanding my expertise across the modern software stack.
+        </p>
+
+        <div class="about-highlights">
+          <div class="highlight-box">
+            <h3>Education</h3>
+            <span>B.Tech CSE, CUSAT (2023 - 2027)</span>
+          </div>
+          <div class="highlight-box">
+            <h3>Core Expertise</h3>
+            <span>AI & Machine Learning</span>
+            <span>Full Stack Development</span>
+            <span>Data Engineering</span>
+          </div>
+          <div class="highlight-box">
+            <h3>Currently Exploring</h3>
+            <span>Generative AI & LLMs</span>
+            <span>AI Agents & Automation</span>
+            <span>Cloud-Native Applications</span>
+          </div>
+        </div>
+
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="section">
+      <h2 class="section-title">02. Technical Skills</h2>
+      <div class="skills-grid">
+
+        <div class="skills-category">
+          <h3>Languages</h3>
+          <div class="skills-list">
+            <span class="skill-badge">Python</span>
+            <span class="skill-badge">C</span>
+            <span class="skill-badge">Java</span>
+            <span class="skill-badge">C++</span>
+          </div>
+        </div>
+
+        <div class="skills-category">
+          <h3>Data & ML</h3>
+          <div class="skills-list">
+            <span class="skill-badge">Pandas</span>
+            <span class="skill-badge">NumPy</span>
+            <span class="skill-badge">Matplotlib</span>
+            <span class="skill-badge">Seaborn</span>
+            <span class="skill-badge">Scikit-learn</span>
+            <span class="skill-badge">Statistics</span>
+            <span class="skill-badge">Feature Engineering</span>
+            <span class="skill-badge">Predictive Modeling</span>
+          </div>
+        </div>
+
+        <div class="skills-category">
+          <h3>Database</h3>
+          <div class="skills-list">
+            <span class="skill-badge">MySQL</span>
+            <span class="skill-badge">PostgreSQL</span>
+            <span class="skill-badge">MongoDB</span>
+            <span class="skill-badge">SQL</span>
+            <span class="skill-badge">DB Design & Query Optimisation</span>
+          </div>
+        </div>
+
+        <div class="skills-category">
+          <h3>Web Dev</h3>
+          <div class="skills-list">
+            <span class="skill-badge">HTML</span>
+            <span class="skill-badge">CSS</span>
+            <span class="skill-badge">JavaScript</span>
+          </div>
+        </div>
+
+        <div class="skills-category">
+          <h3>Tools & Cloud</h3>
+          <div class="skills-list">
+            <span class="skill-badge">Power BI</span>
+            <span class="skill-badge">Tableau</span>
+            <span class="skill-badge">Microsoft Azure</span>
+            <span class="skill-badge">Cloud Computing</span>
+            <span class="skill-badge">Git</span>
+            <span class="skill-badge">GitHub</span>
+            <span class="skill-badge">VS Code</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- EXPERIENCE SECTION -->
+    <section id="experience" class="section">
+      <h2 class="section-title">03. Experience</h2>
+      <div class="timeline">
+
+        <!-- NestSoft -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-role">AI/ML Intern</span>
+              <span class="timeline-company">NestSoft TechnoMaster Pvt Ltd</span>
+              <span class="timeline-date">May 2026 - Jun 2026</span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Built <strong>Shelfsense</strong>, a machine learning-powered business intelligence (BI) solution
+                  for retail shelf and sales analytics, applying statistical analysis and predictive modeling to
+                  identify sales trends.</li>
+                <li>Engineered the full ML pipeline—data preprocessing, feature engineering, model building, and
+                  evaluation—using Python and Scikit-learn, reducing manual analysis time and delivering KPI-driven
+                  business insights to stakeholders.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Elevate Labs -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-role">Data Analyst & ML Intern</span>
+              <span class="timeline-company">Elevate Labs</span>
+              <span class="timeline-date">Apr 2025 - Jun 2025</span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Performed data cleaning, exploratory data analysis (EDA), statistical analysis, and visualization on
+                  real-world datasets using Python, Pandas, Matplotlib, and Seaborn, improving data quality for
+                  downstream modeling.</li>
+                <li>Built and evaluated predictive machine learning models using Scikit-learn, applying model evaluation
+                  metrics to compare performance.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edunet Foundation -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-role">AI Azure Intern</span>
+              <span class="timeline-company">Edunet Foundation</span>
+              <span class="timeline-date">May 2025 - Jun 2025</span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Implemented AI workflows and cloud-based model deployment pipelines using Microsoft Azure AI
+                  services, gaining hands-on exposure to cloud computing and ML Ops fundamentals.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="section">
+      <h2 class="section-title">04. Projects</h2>
+      <div class="projects-grid">
+
+        <!-- Project 1: FIFA World Cup Prediction -->
+        <div class="floppy-disk">
+          <div class="floppy-slider"></div>
+          <div class="floppy-label">
+            <div class="floppy-label-header">
+              <span class="floppy-title">FIFA Predictor</span>
+              <span class="floppy-lang-badge">JS</span>
+            </div>
+            <div class="floppy-description">
+              Built a web app for predicting FIFA World Cup match outcomes, reaching 300+ active users. Leveraged
+              JavaScript frontend algorithms for simulated tournament outcomes.
+            </div>
+            <div class="floppy-footer">
+              <div class="floppy-write-protect"></div>
+              <a href="https://github.com/ashishorbital/wc-26-prediction.git" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small">View
+                Source</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Shelfsense -->
+        <div class="floppy-disk">
+          <div class="floppy-slider"></div>
+          <div class="floppy-label">
+            <div class="floppy-label-header">
+              <span class="floppy-title">Shelfsense BI</span>
+              <span class="floppy-lang-badge">Python / ML</span>
+            </div>
+            <div class="floppy-description">
+              Developed an ML-driven business intelligence tool delivering retail shelf and sales insights. Translates
+              raw retail scans into demand forecasting metrics.
+            </div>
+            <div class="floppy-footer">
+              <div class="floppy-write-protect"></div>
+              <a href="https://github.com/ashishorbital/ShelfSense-business-intelligence.git" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small">View
+                Source</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Incentive Calculation System -->
+        <div class="floppy-disk">
+          <div class="floppy-slider"></div>
+          <div class="floppy-label">
+            <div class="floppy-label-header">
+              <span class="floppy-title">Toyota Incentives</span>
+              <span class="floppy-lang-badge">JS</span>
+            </div>
+            <div class="floppy-description">
+              Built an automated incentive calculation system for Nippon Toyota to streamline sales commission
+              computations and minimize calculation errors.
+            </div>
+            <div class="floppy-footer">
+              <div class="floppy-write-protect"></div>
+              <a href="https://github.com/ashishorbital/incentive-calculator.git" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small">View
+                Source</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4: Personal Portfolio Website -->
+        <div class="floppy-disk">
+          <div class="floppy-slider"></div>
+          <div class="floppy-label">
+            <div class="floppy-label-header">
+              <span class="floppy-title">Portfolio Site</span>
+              <span class="floppy-lang-badge">HTML/CSS/JS</span>
+            </div>
+            <div class="floppy-description">
+              Built a responsive retro-styled portfolio site with smooth custom navigation, project showcases,
+              interactive terminal shell, and cross-browser compatibility.
+            </div>
+            <div class="floppy-footer">
+              <div class="floppy-write-protect"></div>
+              <a href="https://github.com/ashishorbital/portfolio-website.git" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small">View
+                Source</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TERMINAL / COMMAND CENTER SECTION -->
+    <section id="terminal" class="section">
+      <h2 class="section-title">05. Command Center</h2>
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-title">
+            <span class="logo-dot" style="animation-duration: 0.5s;"></span>
+            <span>SH_SESSION // ASHISH@PORTFOLIO</span>
+          </div>
+          <div class="terminal-controls">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+          </div>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="terminal-log" id="terminal-log">
+            <div class="terminal-line">ASHISH(R) PORTFOLIO COMMAND SHELL [Version 1.0.2]</div>
+            <div class="terminal-line">Type 'help' for a list of available commands.</div>
+            <div class="terminal-line">&nbsp;</div>
+          </div>
+          <div class="terminal-input-row">
+            <span class="terminal-prompt">guest@ashish:~$&nbsp;</span>
+            <input type="text" class="terminal-input" id="terminal-input" autocomplete="off">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION & CERTIFICATIONS -->
+    <section class="section edu-cert-grid">
+
+      <!-- Education Column -->
+      <div class="edu-column">
+        <h2 class="section-title">06.Education</h2>
+        <div class="edu-card">
+          <h3>B.Tech in Computer Science & Engineering</h3>
+          <div class="edu-meta">Cochin University of Science and Technology (CUSAT)</div>
+          <div class="edu-detail">
+            <strong>Duration:</strong> 2023 - 2027<br>
+            <strong>CGPA:</strong> 7.83 <br>
+            <strong>Key Subjects:</strong> Data Structures, DBMS, OOPs, OS, Computer Networks
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications Column -->
+      <div class="cert-column">
+        <h2 class="section-title">07.Certifications</h2>
+        <div class="cert-card">
+          <h3>Advanced Distributed Systems</h3>
+          <div class="cert-meta">NPTEL</div>
+          <div class="cert-detail">
+            Rigorous certification covering consensus algorithms, replication mechanisms, distributed datastores, and
+            system fault tolerance.
+          </div>
+        </div>
+        <div class="cert-card">
+          <h3>LLM Applications with Prompt Engineering</h3>
+          <div class="cert-meta">NVIDIA</div>
+          <div class="cert-detail">
+            Hands-on certification in optimizing LLM responses, agentic system prompts, and structuring vector store
+            embeddings.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section">
+      <h2 class="section-title">08. Contact</h2>
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="contact-card">
+            <h3>Email</h3>
+            <div class="contact-detail"><a href="#contact">ashishpsadan@gmail.com</a></div>
+          </div>
+          <div class="contact-card">
+            <h3>Phone</h3>
+            <div class="contact-detail">+91 6282761232</div>
+          </div>
+          <div class="contact-card">
+            <h3>LinkedIn</h3>
+            <div class="contact-detail"><a href="https://linkedin.com/in/ashishpsadan"
+                target="_blank" rel="noopener noreferrer">linkedin.com/in/ashishpsadan</a></div>
+          </div>
+          <div class="contact-card">
+            <h3>Location</h3>
+            <div class="contact-detail">Kochi, Kerala, India</div>
+          </div>
+        </div>
+
+        <div>
+          <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        
+            <!-- Required -->
+            <input type="hidden" name="access_key" value="28560016-76d0-44c5-a59f-9b56ca0efdde">
+        
+            <!-- Optional -->
+            <input type="hidden" name="subject" value="New Portfolio Contact">
+        
+            <!-- Spam Protection -->
+            <input type="checkbox" name="botcheck" style="display:none;">
+        
+            <div id="form-msg" class="form-message"></div>
+        
+            <div class="form-group">
+              <label for="form-name">Name</label>
+              <input type="text" id="form-name" name="name" class="form-input" placeholder="e.g. USERNAME" required>
+            </div>
+        
+            <div class="form-group">
+              <label for="form-email">Email</label>
+              <input type="email" id="form-email" name="email" class="form-input" placeholder="e.g. USER@DOMAIN.COM" required>
+            </div>
+        
+            <div class="form-group">
+              <label for="form-message">Message</label>
+              <textarea id="form-message" name="message" class="form-input" rows="5" placeholder="ENTER TRANSMISSION..."
+                required></textarea>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">
+              Transmit Message
+            </button>
+        
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <ul class="footer-links">
+        <li><a href="https://github.com/ashishorbital" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/ashishpsadan" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="#contact">Email</a></li>
+      </ul>
+      <div class="footer-credits">
+        <span>LET'S BUILD SOMETHING AMAZING.</span> 
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Controls (CRT, Dark Mode & Audio) -->
+  <div class="crt-switch-container">
+    <!-- Mobile-only single toggle trigger -->
+    <button class="crt-switch settings-trigger" id="settings-trigger" title="Settings">
+      <span>&#9881; SYS</span>
+    </button>
+    <!-- Panel: always visible on desktop, toggled on mobile -->
+    <div class="settings-panel" id="settings-panel">
+      <button class="crt-switch" id="crt-toggle" title="Toggle CRT Retro Filter">
+        <div class="crt-switch-indicator"></div>
+        <span>CRT FILTER</span>
+      </button>
+      <button class="crt-switch" id="dark-toggle" title="Toggle Retro Dark Mode">
+        <div class="crt-switch-indicator" id="dark-indicator"></div>
+        <span>DARK MODE</span>
+      </button>
+      <button class="crt-switch" id="sound-toggle" title="Toggle Retro Sound Effects">
+        <div class="crt-switch-indicator" id="sound-indicator"></div>
+        <span>SOUND OFF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Custom Hammer Cursor -->
+  <div id="custom-cursor"></div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/snake.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
