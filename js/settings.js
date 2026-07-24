@@ -32,17 +32,10 @@
       });
     }
 
-    // 3. Retro Dark Mode Toggler
-    const darkToggle = document.getElementById("dark-toggle");
+    // 3. Retro Dark Mode Initialization
     const isDarkMode = localStorage.getItem("dark-mode") === "true";
     if (isDarkMode) {
       document.body.classList.add("dark-mode");
-    }
-    if (darkToggle) {
-      darkToggle.addEventListener("click", () => {
-        const isActive = document.body.classList.toggle("dark-mode");
-        localStorage.setItem("dark-mode", isActive);
-      });
     }
 
     // 4. Retro Sound Effects Synthesizer Toggler

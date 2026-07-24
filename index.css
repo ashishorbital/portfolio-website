@@ -1273,8 +1273,31 @@ a.btn-accent:active {
   .nav-container {
     padding: var(--spacing-space-3) var(--spacing-space-5);
   }
-  .menu-toggle { display: none; }
-  .nav-links    { display: none; }
+  .menu-toggle { display: none; } /* Hide menu toggle on mobile as requested */
+  
+  /* Keep nav-links container visible for the pull chain, but hide other links if menu isn't open */
+  .nav-links { 
+    display: flex; 
+    gap: 0;
+  }
+  .nav-links:not(.mobile-open) li:not(.nav-pull-chain-wrapper) {
+    display: none;
+  }
+  
+  .nav-links.mobile-open {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--color-paper);
+    flex-direction: column;
+    padding: var(--spacing-space-4);
+    border-bottom: 2px solid var(--color-ink);
+    z-index: 999;
+  }
+  .nav-links.mobile-open li {
+    display: block !important;
+  }
 
   /* Layout */
   .main-content {
@@ -1714,6 +1737,84 @@ body.sound-on #sound-indicator {
   max-height: 90%;
   object-fit: contain;
   image-rendering: pixelated;
+}
+
+/* =========================================
+   PULL CHAIN LAMP
+   ========================================= */
+.nav-pull-chain-wrapper {
+  position: relative;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.pull-chain-container {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 400px;
+  z-index: 9999;
+  cursor: grab;
+}
+
+.pull-chain-container:active {
+  cursor: grabbing;
+}
+
+.chain-beads {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bead {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-white);
+  border: 2px solid var(--color-ink);
+  box-shadow: 2px 2px 0px var(--color-ink);
+  border-radius: 0;
+  margin-left: -6px; /* Center horizontally (8px width + 4px border) / 2 */
+  margin-top: -6px;  /* Center vertically (8px height + 4px border) / 2 */
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.chain-knob {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 16px;
+  height: 24px;
+  background-color: var(--color-accent-red);
+  border: 3px solid var(--color-ink);
+  box-shadow: 3px 3px 0px var(--color-ink);
+  border-radius: 0;
+  margin-left: -11px; /* Center horizontally (16px width + 6px border) / 2 */
+  margin-top: -15px;  /* Center vertically (24px height + 6px border) / 2 */
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+body.dark-mode .bead {
+  background-color: var(--color-accent-blue);
+  box-shadow: 2px 2px 0px var(--color-ink);
+}
+
+body.dark-mode .chain-knob {
+  background-color: #39ff14;
+  box-shadow: 3px 3px 0px var(--color-ink), 0 0 10px #39ff14;
+}
+
+@media (max-width: 768px) {
+  .pull-chain-container {
+    transform: scale(0.65);
+    transform-origin: top center;
+  }
 }
 
 
