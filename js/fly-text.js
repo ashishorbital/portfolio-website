@@ -326,6 +326,9 @@ function initFlyText(el) {
   let lastW = window.innerWidth;
   
   window.addEventListener('resize', () => {
+    // Completely ignore resizes on touch devices to prevent zoom/scroll loops
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     const w = window.innerWidth;
     if (Math.abs(w - lastW) < 50) return; // Only trigger on significant resize (e.g. orientation change)
     
