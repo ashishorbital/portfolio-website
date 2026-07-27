@@ -283,6 +283,13 @@ function initFlyText(el) {
   const d = el.dataset;
   const p = { ...DEFAULTS, ...d };
 
+  if (window.innerWidth < 768) {
+    p.windStrength = (parseFloat(p.windStrength) || 400) * 0.3;
+    p.scatter = (parseFloat(p.scatter) || 80) * 0.3;
+    p.maxRotation = (parseFloat(p.maxRotation) || 360) * 0.3;
+    p.depth = (parseFloat(p.depth) || 120) * 0.3;
+  }
+
   const raw = el.textContent.replace(/\s+/g, " ").trim();
   const { placeholder, overlay } = buildStructure(el, raw);
 
@@ -315,12 +322,15 @@ function initFlyText(el) {
   setup();
 
   let resizeTimer;
-  let lastW = 0, lastH = 0;
+  let lastW = 0;
   const ro = new ResizeObserver(([entry]) => {
     r = seededRandom(seed);
-    const { inlineSize: w, blockSize: h } = entry.contentBoxSize[0];
-    if (w === lastW && h === lastH) return;
-    lastW = w; lastH = h;
+    const { inlineSize: w } = entry.contentBoxSize[0];
+    
+    // Ignore small resizes to prevent mobile scroll jumping when address bar hides
+    if (lastW !== 0 && Math.abs(w - lastW) < 15) return;
+    lastW = w;
+    
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(setup, 200);
   });
