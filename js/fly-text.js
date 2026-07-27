@@ -280,13 +280,16 @@ function buildTimeline(el, chars, p) {
 }
 
 function initFlyText(el) {
-  // Disable completely on mobile, tablet, or touch devices to prevent bad animations and overflow zoom issues
-  if (window.innerWidth < 992 || window.matchMedia("(pointer: coarse)").matches) {
-    return; 
-  }
-
   const d = el.dataset;
   const p = { ...DEFAULTS, ...d };
+
+  // Tune down parameters significantly for mobile to prevent overflow and clutter
+  if (window.innerWidth < 992 || window.matchMedia("(pointer: coarse)").matches) {
+    p.windStrength = (parseFloat(p.windStrength) || 400) * 0.15;
+    p.scatter = (parseFloat(p.scatter) || 80) * 0.15;
+    p.maxRotation = (parseFloat(p.maxRotation) || 360) * 0.2;
+    p.depth = (parseFloat(p.depth) || 120) * 0.2;
+  }
 
   const raw = el.textContent.replace(/\s+/g, " ").trim();
   const { placeholder, overlay } = buildStructure(el, raw);
@@ -319,6 +322,19 @@ function initFlyText(el) {
 
   setup();
 
+  let resizeTimer;
+  let lastW = window.innerWidth;
+  
+  window.addEventListener('resize', () => {
+    const w = window.innerWidth;
+    if (Math.abs(w - lastW) < 50) return; // Only trigger on significant resize (e.g. orientation change)
+    
+    lastW = w;
+    r = seededRandom(seed);
+    
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(setup, 200);
+  });
 }
 
 document.fonts.ready.then(() => {
