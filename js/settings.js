@@ -21,7 +21,7 @@
 
     // 2. CRT Retrowave Scanlines Toggler
     const crtToggle = document.getElementById("crt-toggle");
-    const isCrtActive = localStorage.getItem("crt-active") === "true";
+    const isCrtActive = localStorage.getItem("crt-active") !== "false";
     if (isCrtActive) {
       document.body.classList.add("crt-active");
     }

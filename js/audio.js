@@ -1,6 +1,6 @@
 (function() {
   let audioCtx = null;
-  let soundEnabled = localStorage.getItem("sound-enabled") === "true";
+  let soundEnabled = localStorage.getItem("sound-enabled") !== "false";
 
   function initAudio() {
     if (!audioCtx) {
