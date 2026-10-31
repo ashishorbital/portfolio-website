@@ -9,15 +9,19 @@
 
     menuToggle.addEventListener("click", (e) => {
       e.stopPropagation();
-      navLinks.classList.toggle("mobile-open");
-      menuToggle.textContent = navLinks.classList.contains("mobile-open") ? "CLOSE" : "MENU";
+      const isOpen = navLinks.classList.toggle("mobile-open");
+      menuToggle.setAttribute("aria-expanded", isOpen);
+      menuToggle.textContent = isOpen ? "CLOSE" : "MENU";
+      if (window.playClickSound) window.playClickSound();
     });
 
     // Close mobile nav when clicking a link
     navLinksList.forEach(link => {
       link.addEventListener("click", () => {
         navLinks.classList.remove("mobile-open");
+        menuToggle.setAttribute("aria-expanded", "false");
         menuToggle.textContent = "MENU";
+        if (window.playClickSound) window.playClickSound();
       });
     });
 
@@ -25,6 +29,7 @@
     document.addEventListener("click", (e) => {
       if (!navLinks.contains(e.target) && e.target !== menuToggle) {
         navLinks.classList.remove("mobile-open");
+        menuToggle.setAttribute("aria-expanded", "false");
         menuToggle.textContent = "MENU";
       }
     });

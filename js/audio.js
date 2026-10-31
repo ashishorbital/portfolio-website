@@ -2,6 +2,15 @@
   let audioCtx = null;
   let soundEnabled = localStorage.getItem("sound-enabled") !== "false";
 
+  // Apple §13 Multimodal feedback helper: harmonize audio + haptic on the same frame
+  function triggerHaptic(pattern = 8) {
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      try {
+        navigator.vibrate(pattern);
+      } catch (err) {}
+    }
+  }
+
   function initAudio() {
     if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -9,6 +18,7 @@
   }
 
   function playHammerSound() {
+    triggerHaptic(12);
     if (!soundEnabled) return;
     initAudio();
     const osc = audioCtx.createOscillator();
@@ -29,6 +39,7 @@
   }
 
   function playSplatSound() {
+    triggerHaptic(16);
     if (!soundEnabled) return;
     initAudio();
     const bufferSize = audioCtx.sampleRate * 0.12;
@@ -59,6 +70,7 @@
   }
 
   function playChimeSound() {
+    triggerHaptic([10, 30, 14]);
     if (!soundEnabled) return;
     initAudio();
     const now = audioCtx.currentTime;
@@ -106,6 +118,7 @@
   }
 
   function playClickSound() {
+    triggerHaptic(6);
     if (!soundEnabled) return;
     initAudio();
     const osc = audioCtx.createOscillator();
@@ -125,6 +138,7 @@
   }
 
   function playSnakeDeathSound() {
+    triggerHaptic([20, 40, 20]);
     if (!soundEnabled) return;
     initAudio();
     const now = audioCtx.currentTime;

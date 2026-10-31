@@ -52,6 +52,7 @@
             `TRANSMISSION_SUCCESS: THANK YOU, ${name.toUpperCase()}. MESSAGE SECURELY ROUTED TO ASHISH PS.`;
 
           formMsg.classList.add("success");
+          if (window.playChimeSound) window.playChimeSound();
           contactForm.reset();
         } else {
           formMsg.textContent =

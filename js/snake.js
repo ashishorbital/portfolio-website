@@ -196,7 +196,7 @@
       // Floating text
       if (floatingText && floatingText.timer > 0) {
         ctx.fillStyle = colorRed;
-        ctx.font = "bold 11px 'Press Start 2P', Courier, monospace";
+        ctx.font = "bold 12px 'Bubblegum Sans', 'Spinnaker', cursive, sans-serif";
         ctx.fillText(floatingText.text, floatingText.x, floatingText.y);
         floatingText.y -= 1.2;
         floatingText.timer--;

@@ -50,6 +50,34 @@
     });
   }
 
+  // Apple Design Principles: Velocity history & Rubber-banding
+  const velocityHistory = [];
+
+  function recordPointerPosition(x, y) {
+    const now = performance.now();
+    velocityHistory.push({ x, y, time: now });
+    while (velocityHistory.length > 1 && (now - velocityHistory[0].time > 100)) {
+      velocityHistory.shift();
+    }
+  }
+
+  function getReleaseVelocity() {
+    if (velocityHistory.length < 2) return { vx: 0, vy: 0 };
+    const first = velocityHistory[0];
+    const last = velocityHistory[velocityHistory.length - 1];
+    const dt = last.time - first.time;
+    if (dt <= 0) return { vx: 0, vy: 0 };
+    return {
+      vx: ((last.x - first.x) / dt) * 16,
+      vy: ((last.y - first.y) / dt) * 16
+    };
+  }
+
+  // Apple §9: Progressive resistance rubber-banding
+  function rubberband(overshoot, dimension = 180, constant = 0.55) {
+    return (overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot));
+  }
+
   function playPullChainSound() {
     if (window.isSoundEnabled && window.isSoundEnabled()) {
       if (window.initAudio) window.initAudio();
@@ -78,6 +106,12 @@
     const isActive = document.body.classList.toggle("dark-mode");
     localStorage.setItem("dark-mode", isActive);
     playPullChainSound();
+    // Multimodal audio-haptic harmony (§13)
+    if (navigator.vibrate) {
+      try {
+        navigator.vibrate(15);
+      } catch (e) {}
+    }
   }
 
   function updatePhysics() {
@@ -97,17 +131,23 @@
         node.x += vx + (0 - node.x) * 0.1;
         node.y += vy + (ANCHOR_Y - node.y) * 0.1;
       } else if (i === draggedNodeIndex && isDragging) {
-        // Being dragged by mouse
+        // Direct manipulation with Apple Rubber-banding (§2, §9)
         const targetX = knobStartX + (mouseX - dragStartX);
-        const targetY = knobStartY + (mouseY - dragStartY);
+        const rawTargetY = knobStartY + (mouseY - dragStartY);
+        const restKnobY = ANCHOR_Y + (numBeads * REST_LENGTH);
         
-        // Prevent pushing up too high easily, mostly allow pulling down
+        let targetY = rawTargetY;
+        if (rawTargetY > restKnobY + TOGGLE_THRESHOLD) {
+          const overshoot = rawTargetY - (restKnobY + TOGGLE_THRESHOLD);
+          targetY = restKnobY + TOGGLE_THRESHOLD + rubberband(overshoot, 180, 0.55);
+        }
+        
         node.oldX = node.x;
         node.oldY = node.y;
         
-        // Move towards target
-        node.x += (targetX - node.x) * 0.5;
-        node.y += (targetY - node.y) * 0.5;
+        // Smooth direct tracking
+        node.x += (targetX - node.x) * 0.55;
+        node.y += (targetY - node.y) * 0.55;
         
       } else {
         // Normal node
@@ -119,8 +159,6 @@
         
         node.x += vx;
         node.y += vy + GRAVITY; // add gravity
-        
-        // Wind or noise could go here
       }
     }
 
@@ -180,11 +218,21 @@
     requestAnimationFrame(updatePhysics);
   }
 
-  // Interaction
+  // Interaction - Pointer Events & Velocity Handoff (§2, §5)
   function onPointerDown(e) {
-    dragStartX = e.clientX || e.touches?.[0].clientX || 0;
-    dragStartY = e.clientY || e.touches?.[0].clientY || 0;
+    dragStartX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    dragStartY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
     
+    // Capture pointer so gesture continues seamlessly outside bounds
+    if (e.pointerId && pullChain.setPointerCapture) {
+      try {
+        pullChain.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    }
+
+    velocityHistory.length = 0;
+    recordPointerPosition(dragStartX, dragStartY);
+
     // Find clicked node
     draggedNodeIndex = -1;
     for (let i = 0; i < nodes.length; i++) {
@@ -206,7 +254,7 @@
     mouseY = dragStartY;
     
     pullChain.style.cursor = 'grabbing';
-    e.preventDefault();
+    if (e.cancelable) e.preventDefault();
     
     const cursor = document.getElementById('custom-cursor');
     if (cursor) cursor.style.display = 'none';
@@ -214,8 +262,9 @@
 
   function onPointerMove(e) {
     if (!isDragging) return;
-    mouseX = e.clientX || e.touches?.[0].clientX || 0;
-    mouseY = e.clientY || e.touches?.[0].clientY || 0;
+    mouseX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    mouseY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    recordPointerPosition(mouseX, mouseY);
   }
 
   function onPointerUp(e) {
@@ -223,10 +272,16 @@
     isDragging = false;
     pullChain.style.cursor = 'grab';
     
-    // Add a slight random jolt on release to make it wobble realistically
-    if (draggedNodeIndex !== -1) {
-      nodes[draggedNodeIndex].x += (Math.random() - 0.5) * 10;
+    // Apple §5: Velocity handoff - pass user gesture velocity to spring physics
+    const releaseVel = getReleaseVelocity();
+    if (draggedNodeIndex !== -1 && draggedNodeIndex < nodes.length) {
+      const node = nodes[draggedNodeIndex];
+      const clampVx = Math.max(Math.min(releaseVel.vx, 25), -25);
+      const clampVy = Math.max(Math.min(releaseVel.vy, 35), -35);
+      node.oldX = node.x - clampVx;
+      node.oldY = node.y - clampVy;
     }
+    velocityHistory.length = 0;
     
     const cursor = document.getElementById('custom-cursor');
     if (cursor && !pullChain.matches(':hover')) {
@@ -234,8 +289,19 @@
     }
   }
 
-  pullChain.addEventListener('mousedown', onPointerDown);
-  pullChain.addEventListener('touchstart', onPointerDown, { passive: false });
+  if (window.PointerEvent) {
+    pullChain.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
+  } else {
+    pullChain.addEventListener('mousedown', onPointerDown);
+    pullChain.addEventListener('touchstart', onPointerDown, { passive: false });
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('touchmove', onPointerMove, { passive: false });
+    window.addEventListener('mouseup', onPointerUp);
+    window.addEventListener('touchend', onPointerUp);
+  }
   
   pullChain.addEventListener('mouseenter', () => {
     const cursor = document.getElementById('custom-cursor');
@@ -246,12 +312,6 @@
     const cursor = document.getElementById('custom-cursor');
     if (cursor) cursor.style.display = 'block';
   });
-  
-  window.addEventListener('mousemove', onPointerMove);
-  window.addEventListener('touchmove', onPointerMove, { passive: false });
-  
-  window.addEventListener('mouseup', onPointerUp);
-  window.addEventListener('touchend', onPointerUp);
   
   // Start loop
   requestAnimationFrame(updatePhysics);
