@@ -114,6 +114,11 @@
     }
   }
 
+  function getScale() {
+    const rect = pullChain.getBoundingClientRect();
+    return (rect.width / (pullChain.offsetWidth || 44)) || 1;
+  }
+
   function updatePhysics() {
     // 1. Verlet Integration (apply forces and update positions)
     for (let i = 0; i < nodes.length; i++) {
@@ -132,22 +137,24 @@
         node.y += vy + (ANCHOR_Y - node.y) * 0.1;
       } else if (i === draggedNodeIndex && isDragging) {
         // Direct manipulation with Apple Rubber-banding (§2, §9)
-        const targetX = knobStartX + (mouseX - dragStartX);
-        const rawTargetY = knobStartY + (mouseY - dragStartY);
+        const scale = getScale();
+        const targetX = knobStartX + (mouseX - dragStartX) / scale;
+        const rawTargetY = knobStartY + (mouseY - dragStartY) / scale;
         const restKnobY = ANCHOR_Y + (numBeads * REST_LENGTH);
+        const threshold = (window.innerWidth <= 768) ? 35 : TOGGLE_THRESHOLD;
         
         let targetY = rawTargetY;
-        if (rawTargetY > restKnobY + TOGGLE_THRESHOLD) {
-          const overshoot = rawTargetY - (restKnobY + TOGGLE_THRESHOLD);
-          targetY = restKnobY + TOGGLE_THRESHOLD + rubberband(overshoot, 180, 0.55);
+        if (rawTargetY > restKnobY + threshold) {
+          const overshoot = rawTargetY - (restKnobY + threshold);
+          targetY = restKnobY + threshold + rubberband(overshoot, 180, 0.55);
         }
         
         node.oldX = node.x;
         node.oldY = node.y;
         
         // Smooth direct tracking
-        node.x += (targetX - node.x) * 0.55;
-        node.y += (targetY - node.y) * 0.55;
+        node.x += (targetX - node.x) * 0.6;
+        node.y += (targetY - node.y) * 0.6;
         
       } else {
         // Normal node
@@ -201,10 +208,11 @@
       }
     }
     
-    // Check threshold toggle
+    // Check threshold toggle: triggers reliably whenever the knob travels past threshold
     const knobNode = nodes[nodes.length - 1];
     const restKnobY = ANCHOR_Y + (numBeads * REST_LENGTH);
-    if (isDragging && draggedNodeIndex === nodes.length - 1 && !hasTriggeredThisPull && (knobNode.y - restKnobY > TOGGLE_THRESHOLD)) {
+    const threshold = (window.innerWidth <= 768) ? 35 : TOGGLE_THRESHOLD;
+    if (isDragging && !hasTriggeredThisPull && (knobNode.y - restKnobY > threshold)) {
       hasTriggeredThisPull = true;
       toggleTheme();
     }
@@ -218,10 +226,21 @@
     requestAnimationFrame(updatePhysics);
   }
 
-  // Interaction - Pointer Events & Velocity Handoff (§2, §5)
+  // Interaction - Touch & Pointer Events with Velocity Handoff (§2, §5)
+  let pointerDownTime = 0;
+  let hasMovedSignificantly = false;
+
   function onPointerDown(e) {
-    dragStartX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-    dragStartY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    pointerDownTime = performance.now();
+    hasMovedSignificantly = false;
+
+    if (e.touches && e.touches.length > 0) {
+      dragStartX = e.touches[0].clientX;
+      dragStartY = e.touches[0].clientY;
+    } else {
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+    }
     
     // Capture pointer so gesture continues seamlessly outside bounds
     if (e.pointerId && pullChain.setPointerCapture) {
@@ -233,16 +252,18 @@
     velocityHistory.length = 0;
     recordPointerPosition(dragStartX, dragStartY);
 
-    // Find clicked node
+    // Find clicked node or target
     draggedNodeIndex = -1;
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].element === e.target) {
+      if (nodes[i].element === e.target || (nodes[i].element && nodes[i].element.contains(e.target))) {
         draggedNodeIndex = i;
         break;
       }
     }
-    // Default to knob if clicking empty container space
-    if (draggedNodeIndex === -1) draggedNodeIndex = nodes.length - 1;
+    // If clicking container, knob, or lower beads, treat as pulling the bottom knob
+    if (draggedNodeIndex === -1 || draggedNodeIndex >= numBeads - 12) {
+      draggedNodeIndex = nodes.length - 1;
+    }
     
     isDragging = true;
     hasTriggeredThisPull = false;
@@ -262,25 +283,55 @@
 
   function onPointerMove(e) {
     if (!isDragging) return;
-    mouseX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-    mouseY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    if (e.touches && e.touches.length > 0) {
+      mouseX = e.touches[0].clientX;
+      mouseY = e.touches[0].clientY;
+    } else {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    }
+
+    if (Math.hypot(mouseX - dragStartX, mouseY - dragStartY) > 6) {
+      hasMovedSignificantly = true;
+    }
+
     recordPointerPosition(mouseX, mouseY);
+    if (e.cancelable) e.preventDefault();
   }
 
   function onPointerUp(e) {
     if (!isDragging) return;
     isDragging = false;
     pullChain.style.cursor = 'grab';
-    
-    // Apple §5: Velocity handoff - pass user gesture velocity to spring physics
-    const releaseVel = getReleaseVelocity();
-    if (draggedNodeIndex !== -1 && draggedNodeIndex < nodes.length) {
-      const node = nodes[draggedNodeIndex];
-      const clampVx = Math.max(Math.min(releaseVel.vx, 25), -25);
-      const clampVy = Math.max(Math.min(releaseVel.vy, 35), -35);
-      node.oldX = node.x - clampVx;
-      node.oldY = node.y - clampVy;
+
+    if (e.pointerId && pullChain.releasePointerCapture) {
+      try {
+        pullChain.releasePointerCapture(e.pointerId);
+      } catch (err) {}
     }
+
+    const duration = performance.now() - pointerDownTime;
+    const dy = (mouseY - dragStartY);
+
+    // Tap-to-toggle fallback (instant toggle on simple tap/touch without dragging)
+    if (!hasTriggeredThisPull && (!hasMovedSignificantly || duration < 320) && Math.abs(dy) < 25) {
+      toggleTheme();
+      // Inject an impulse downward to physically bounce the chain
+      const knobNode = nodes[nodes.length - 1];
+      knobNode.oldY = knobNode.y - 35;
+      knobNode.oldX = knobNode.x + (Math.random() - 0.5) * 10;
+    } else {
+      // Apple §5: Velocity handoff - pass user gesture velocity to spring physics
+      const releaseVel = getReleaseVelocity();
+      if (draggedNodeIndex !== -1 && draggedNodeIndex < nodes.length) {
+        const node = nodes[draggedNodeIndex];
+        const clampVx = Math.max(Math.min(releaseVel.vx, 25), -25);
+        const clampVy = Math.max(Math.min(releaseVel.vy, 35), -35);
+        node.oldX = node.x - clampVx;
+        node.oldY = node.y - clampVy;
+      }
+    }
+    
     velocityHistory.length = 0;
     
     const cursor = document.getElementById('custom-cursor');
@@ -289,18 +340,19 @@
     }
   }
 
-  if (window.PointerEvent) {
-    pullChain.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('pointercancel', onPointerUp);
-  } else {
-    pullChain.addEventListener('mousedown', onPointerDown);
+  pullChain.addEventListener('pointerdown', onPointerDown);
+  window.addEventListener('pointermove', onPointerMove, { passive: false });
+  window.addEventListener('pointerup', onPointerUp);
+  window.addEventListener('pointercancel', onPointerUp);
+
+  if (!window.PointerEvent) {
     pullChain.addEventListener('touchstart', onPointerDown, { passive: false });
-    window.addEventListener('mousemove', onPointerMove);
     window.addEventListener('touchmove', onPointerMove, { passive: false });
-    window.addEventListener('mouseup', onPointerUp);
     window.addEventListener('touchend', onPointerUp);
+    window.addEventListener('touchcancel', onPointerUp);
+    pullChain.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
   }
   
   pullChain.addEventListener('mouseenter', () => {
